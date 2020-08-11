@@ -4,7 +4,8 @@ list=$(cat $1)
 
 for host in $list
 do
-        ip=$(ping -c1 $host 2>/dev/null | grep PING | awk -F'[()]' '{print $2}')
-        echo "$host : $ip"
-        echo "$host : $ip" >> ip.txt
+        ips=$(dig "$host" +short 2>/dev/null | grep -oP "([0-9]{1,3}\.){3}[0-9]{1,3}")
+        line=$(echo $ips | tr -d '\n' | tr ' ' ', ' )
+        echo "$host : $ips"
+        echo "$host : $ips" >> ip.txt
 done
